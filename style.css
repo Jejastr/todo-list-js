@@ -1,0 +1,123 @@
+body {
+  background-color: blanchedalmond;
+  padding: 20px;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  margin: 0 auto;
+  background-color: rgb(115, 115, 250);
+  border-radius: 8px;
+  color: rgb(233, 233, 233);
+  margin-bottom: 20px;
+}
+
+.conteiner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.addTask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+input {
+  max-width: 500px;
+  width: 100%;
+  height: 45px;
+  /* Трохи збільшив висоту для кращого вигляду */
+  padding: 0 15px;
+  /* Відступ тексту від країв */
+  border-radius: 8px;
+  outline: none;
+  border: 2px solid #e0e0e0;
+  background-color: #ffffff;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+  /* Щоб padding не розширював інпут */
+
+  /* Плавна анімація при взаємодії */
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+input:hover {
+  border-color: #b0b0b0;
+}
+
+input:focus {
+  border-color: rgb(197, 171, 197);
+  /* Ваш колір з кнопки */
+  box-shadow: 0 0 8px rgba(197, 171, 197, 0.3);
+  background-color: #fff;
+}
+
+input::placeholder {
+  color: #aaa;
+  font-weight: 400;
+}
+
+button {
+  height: 40px;
+  width: 200px;
+  background-color: rgb(197, 171, 197);
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: rgb(180, 150, 180);
+}
+
+button:active {
+  transform: scale(0.96);
+  /* Кнопка стискається на 4% */
+}
+
+ul {
+  list-style-type: none;
+  /* Прибираємо стандартні крапочки */
+  padding: 0;
+  margin-top: 20px;
+  max-width: 600px;
+  width: 100%;
+}
+
+
+li {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+  /* Для майбутнього: щоб текст і кнопка видалення були в один рядок */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+li:hover {
+  border-color: rgb(197, 171, 197);
+  transform: translateX(5px);
+  /* Легке зміщення вбік */
+}
