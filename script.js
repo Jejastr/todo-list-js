@@ -1,24 +1,65 @@
-const button = document.querySelector('.button') // Отримую кнопку
-const input = document.querySelector('.text')  // Отримую інпут
-const list = document.querySelector('.list') // отримую список
+const button = document.querySelector(".button") // Отримую кнопку
+const input = document.querySelector(".text") // Отримую інпут
+const list = document.querySelector(".list") // Отримую список
 // Додаю слухач подій на кнопку
-button.addEventListener('click', () => {
-  const text = input.value.trim() // Видаляю пробіли
- //Ящо текст пустий виходим з функції
-  if(text === '') { 
+button.addEventListener("click", () => {
+  const text = input.value.trim() // Отримаю значення інпуту та видаляю пробіли
+  //Якщо текст пустий виходим з функції
+  if (text === "") {
     return
   }
 
-  const elementLi = document.createElement('li') // Створюю елемент
-  elementLi.textContent = text //Наповнюю його
-  list.appendChild(elementLi) // Додаю цей елемент в список
-  input.value = '' // Очищую інпут
+  const li = document.createElement("li") // Створюю елемент
+  li.classList.add('todo-item')
+
+  const textSpan = document.createElement('span')
+  textSpan.classList.add('todo-text')
+  textSpan.textContent = text
+
+  const actions = document.createElement('div')
+  actions.classList.add('actions')
+
+  const deleteBtn = document.createElement('button')
+  deleteBtn.classList.add('delete-btn')
+  deleteBtn.textContent = 'X'
+
+  const doneBtn = document.createElement('button')
+  doneBtn.classList.add('done-btn')
+  doneBtn.textContent = 'Done'
+
+
+  actions.appendChild(deleteBtn) 
+  actions.appendChild(doneBtn)
+  
+  li.appendChild(textSpan)
+  li.appendChild(actions)
+
+  console.log(li)
+
+  list.appendChild(li)
+
+  input.value = "" // Очищую інпут
   input.focus() // Додаємо фокус знову на список
+
+  deleteBtn.addEventListener('click', () => {
+    li.remove()
+  })
+
+
+  doneBtn.addEventListener('click', () => {
+    textSpan.classList.toggle('completed')
+    console.log(textSpan)
+  })
+  
+ 
 })
 
 // Додаю слухач подій на клаву.
-input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    button.click() //Викликаю метод .click на кнопці, що отримав.
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    button.click() // Викликаю метод .click на кнопці, що вже створи.
   }
 })
+
+// Створити - виконання та видалення зі списку.
+
