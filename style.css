@@ -122,7 +122,89 @@ li:hover {
   /* Легке зміщення вбік */
 }
 
+
+/* Контейнер для кожної задачі */
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background-color: #ffffff;
+  border: 1px solid #eeeeee;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  
+  /* Тінь для об'єму */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+  
+  /* Плавність для всіх змін (колір, тінь, рух) */
+  transition: all 0.3s ease;
+}
+
+/* Ефект піднімання при наведенні мишкою */
+.todo-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+  border-color: rgb(197, 171, 197); /* Твій основний колір */
+}
+
+/* Текст всередині задачі */
+.todo-text {
+  font-size: 16px;
+  color: #333333;
+  flex: 1; /* Текст займає весь простір, відштовхуючи кнопки вправо */
+  margin-right: 15px;
+  transition: all 0.3s ease;
+}
+
+/* Стан для виконаної задачі */
 .completed {
   text-decoration: line-through;
+  color: #aaaaaa;
   opacity: 0.6;
+}
+
+/* Контейнер для кнопок */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Загальні стилі для кнопок дій */
+.delete-btn, .done-btn {
+  height: 35px;
+  padding: 0 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+/* Кнопка видалення (X) */
+.delete-btn {
+  background-color: #fcd5d5;
+  color: #ff4d4d;
+}
+
+.delete-btn:hover {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+/* Кнопка виконання (Done) */
+.done-btn {
+  background-color: #defde6;
+  color: #28a745;
+}
+
+.done-btn:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Ефект фізичного натискання для кнопок */
+.delete-btn:active, .done-btn:active {
+  transform: scale(0.9);
 }

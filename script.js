@@ -10,27 +10,26 @@ button.addEventListener("click", () => {
   }
 
   const li = document.createElement("li") // Створюю елемент
-  li.classList.add('todo-item')
+  li.classList.add("todo-item")
 
-  const textSpan = document.createElement('span')
-  textSpan.classList.add('todo-text')
+  const textSpan = document.createElement("span")
+  textSpan.classList.add("todo-text")
   textSpan.textContent = text
 
-  const actions = document.createElement('div')
-  actions.classList.add('actions')
+  const actions = document.createElement("div")
+  actions.classList.add("actions")
 
-  const deleteBtn = document.createElement('button')
-  deleteBtn.classList.add('delete-btn')
-  deleteBtn.textContent = 'X'
+  const deleteBtn = document.createElement("button")
+  deleteBtn.classList.add("delete-btn")
+  deleteBtn.textContent = "X"
 
-  const doneBtn = document.createElement('button')
-  doneBtn.classList.add('done-btn')
-  doneBtn.textContent = 'Done'
+  const doneBtn = document.createElement("button")
+  doneBtn.classList.add("done-btn")
+  doneBtn.textContent = "Done"
 
-
-  actions.appendChild(deleteBtn) 
   actions.appendChild(doneBtn)
-  
+  actions.appendChild(deleteBtn)
+
   li.appendChild(textSpan)
   li.appendChild(actions)
 
@@ -41,18 +40,29 @@ button.addEventListener("click", () => {
   input.value = "" // Очищую інпут
   input.focus() // Додаємо фокус знову на список
 
-  deleteBtn.addEventListener('click', () => {
-    li.remove()
-  })
+  // Накидаю слухач подій на кожну кнопку, але це погано, бо продуктивність падає.
 
+  // deleteBtn.addEventListener('click', () => {
+  //   li.remove()
+  // })
 
-  doneBtn.addEventListener('click', () => {
-    textSpan.classList.toggle('completed')
-    console.log(textSpan)
-  })
-  
- 
+  // doneBtn.addEventListener('click', () => {
+  //   textSpan.classList.toggle('completed')
+  //   console.log(textSpan)
+  // })
+
+  // Використовую Event Delegation, щоб не накидати на кожну кнопку слухач подій.
 })
+
+  list.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-btn")) {
+      e.target.closest("li").remove()
+    }
+
+    if (e.target.classList.contains("done-btn")) {
+      e.target.closest("li").querySelector('.todo-text').classList.toggle("completed")
+    }
+  })
 
 // Додаю слухач подій на клаву.
 input.addEventListener("keydown", (e) => {
@@ -62,4 +72,3 @@ input.addEventListener("keydown", (e) => {
 })
 
 // Створити - виконання та видалення зі списку.
-
