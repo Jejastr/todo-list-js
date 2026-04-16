@@ -16,11 +16,15 @@ function render() {
   todos.forEach((todo) => {
     const li = document.createElement("li") // Створюю елемент
     li.classList.add("todo-item")
+    li.dataset.id = todo.id
 
     const textSpan = document.createElement("span")
     textSpan.classList.add("todo-text")
     textSpan.textContent = todo.text
 
+    if (todo.completed) {
+      textSpan.classList.add("completed")
+    }
 
     const actions = document.createElement("div")
     actions.classList.add("actions")
@@ -44,7 +48,6 @@ function render() {
 }
 
 render()
-
 // Додаю слухач подій на кнопку
 button.addEventListener("click", () => {
   const text = input.value.trim() // Отримаю значення інпуту та видаляю пробіли
@@ -54,6 +57,7 @@ button.addEventListener("click", () => {
   }
 
   todos.push({
+    id: Date.now(),
     text: text,
     completed: false,
   })
@@ -62,23 +66,39 @@ button.addEventListener("click", () => {
 
   render()
 
-
   input.value = "" // Очищую інпут
   input.focus() // Додаємо фокус знову на список
-
-  
 })
 
 list.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete-btn")) {
-    e.target.closest("li").remove()
+    const li = e.target.closest("li")
+    const id = Number(li.dataset.id)
+
+    todos = todos.filter((todo) => todo.id !== id)
+
+    localStorage.setItem("todos", JSON.stringify(todos))
+
+    render()
   }
 
   if (e.target.classList.contains("done-btn")) {
-    e.target
-      .closest("li")
-      .querySelector(".todo-text")
-      .classList.toggle("completed")
+    const li = e.target.closest("li")
+    const id = Number(li.dataset.id)
+
+    todos = todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        }
+      }
+      return todo
+    })
+
+    localStorage.setItem("todos", JSON.stringify(todos))
+
+    render()
   }
 })
 
@@ -90,4 +110,3 @@ input.addEventListener("keydown", (e) => {
 })
 
 // Створити - виконання та видалення зі списку.
-console.log(todos)
