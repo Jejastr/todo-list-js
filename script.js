@@ -2,47 +2,24 @@ const button = document.querySelector(".button") // Отримую кнопку
 const input = document.querySelector(".text") // Отримую інпут
 const list = document.querySelector(".list") // Отримую список
 
-let todos = []
+let todos = loadTodos()
 
-const data = localStorage.getItem("todos")
-
-if (data) {
-  todos = JSON.parse(data)
+function saveTodos() {
+  localStorage.setItem("todos", JSON.stringify(todos))
 }
+
+function loadTodos() {
+  const data = localStorage.getItem("todos")
+  return data ? JSON.parse(data) : []
+}
+
+
 
 function render() {
   list.innerHTML = ""
 
   todos.forEach((todo) => {
-    const li = document.createElement("li") // Створюю елемент
-    li.classList.add("todo-item")
-    li.dataset.id = todo.id
-
-    const textSpan = document.createElement("span")
-    textSpan.classList.add("todo-text")
-    textSpan.textContent = todo.text
-
-    if (todo.completed) {
-      textSpan.classList.add("completed")
-    }
-
-    const actions = document.createElement("div")
-    actions.classList.add("actions")
-
-    const deleteBtn = document.createElement("button")
-    deleteBtn.classList.add("delete-btn")
-    deleteBtn.textContent = "X"
-
-    const doneBtn = document.createElement("button")
-    doneBtn.classList.add("done-btn")
-    doneBtn.textContent = "Done"
-
-    actions.appendChild(doneBtn)
-    actions.appendChild(deleteBtn)
-
-    li.appendChild(textSpan)
-    li.appendChild(actions)
-
+    const li = createTodoElement(todo)
     list.appendChild(li)
   })
 }
@@ -62,7 +39,7 @@ button.addEventListener("click", () => {
     completed: false,
   })
 
-  localStorage.setItem("todos", JSON.stringify(todos))
+  saveTodos()
 
   render()
 
@@ -77,7 +54,7 @@ list.addEventListener("click", (e) => {
 
     todos = todos.filter((todo) => todo.id !== id)
 
-    localStorage.setItem("todos", JSON.stringify(todos))
+    saveTodos()
 
     render()
   }
@@ -96,7 +73,7 @@ list.addEventListener("click", (e) => {
       return todo
     })
 
-    localStorage.setItem("todos", JSON.stringify(todos))
+    saveTodos()
 
     render()
   }
@@ -110,3 +87,38 @@ input.addEventListener("keydown", (e) => {
 })
 
 // Створити - виконання та видалення зі списку.
+
+// Створюємо функцію в якій ми будуємо повноціний елемент lі та повертаємо його, щоб ми могли його перевикористовувати і так далі.
+
+function createTodoElement (todo) {
+  const li = document.createElement("li") // Створюю елемент
+  li.classList.add("todo-item")
+  li.dataset.id = todo.id
+
+  const textSpan = document.createElement("span")
+  textSpan.classList.add("todo-text")
+  textSpan.textContent = todo.text
+
+  if (todo.completed) {
+    textSpan.classList.add("completed")
+  }
+
+  const actions = document.createElement("div")
+  actions.classList.add("actions")
+
+  const deleteBtn = document.createElement("button")
+  deleteBtn.classList.add("delete-btn")
+  deleteBtn.textContent = "X"
+
+  const doneBtn = document.createElement("button")
+  doneBtn.classList.add("done-btn")
+  doneBtn.textContent = "Done"
+
+  actions.appendChild(doneBtn)
+  actions.appendChild(deleteBtn)
+
+  li.appendChild(textSpan)
+  li.appendChild(actions)
+
+  return li
+}
