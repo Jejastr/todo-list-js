@@ -13,8 +13,6 @@ function loadTodos() {
   return data ? JSON.parse(data) : []
 }
 
-
-
 function render() {
   list.innerHTML = ""
 
@@ -55,8 +53,44 @@ list.addEventListener("click", (e) => {
     todos = todos.filter((todo) => todo.id !== id)
 
     saveTodos()
-
     render()
+  }
+
+  if (e.target.classList.contains("todo-text")) {
+    const li = e.target.closest("li")
+    const id = Number(li.dataset.id)
+    const oldText = e.target.textContent
+
+    const input = document.createElement("input")
+    input.type = "text"
+    input.value = oldText
+
+    e.target.replaceWith(input)
+    input.focus()
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const text = input.value.trim()
+        console.log(text)
+        if (text === "") {
+          return
+        }
+        todos = todos.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              text: text,
+            }
+          }
+          return todo
+          
+        })
+        saveTodos()
+
+          render()
+      }
+    })
+
   }
 
   if (e.target.classList.contains("done-btn")) {
@@ -90,7 +124,7 @@ input.addEventListener("keydown", (e) => {
 
 // Створюємо функцію в якій ми будуємо повноціний елемент lі та повертаємо його, щоб ми могли його перевикористовувати і так далі.
 
-function createTodoElement (todo) {
+function createTodoElement(todo) {
   const li = document.createElement("li") // Створюю елемент
   li.classList.add("todo-item")
   li.dataset.id = todo.id
