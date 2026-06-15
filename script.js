@@ -1,158 +1,154 @@
-const button = document.querySelector(".button") // Отримую кнопку
-const input = document.querySelector(".text") // Отримую інпут
-const list = document.querySelector(".list") // Отримую список
+const button = document.querySelector(".button"); // Отримую кнопку
+const input = document.querySelector(".text"); // Отримую інпут
+const list = document.querySelector(".list"); // Отримую список
 
-let todos = loadTodos()
+let todos = loadTodos();
 
 function saveTodos() {
-  localStorage.setItem("todos", JSON.stringify(todos))
+  localStorage.setItem("todos", JSON.stringify(todos));
 }
 
 function loadTodos() {
-  const data = localStorage.getItem("todos")
-  return data ? JSON.parse(data) : []
+  const data = localStorage.getItem("todos");
+  return data ? JSON.parse(data) : [];
 }
 
 function render() {
-  list.innerHTML = ""
+  list.innerHTML = "";
 
   todos.forEach((todo) => {
-    const li = createTodoElement(todo)
-    list.appendChild(li)
-  })
+    const li = createTodoElement(todo);
+    list.appendChild(li);
+  });
 }
 
-render()
+render();
 // Додаю слухач подій на кнопку
 button.addEventListener("click", () => {
-  const text = input.value.trim() // Отримаю значення інпуту та видаляю пробіли
+  const text = input.value.trim(); // Отримаю значення інпуту та видаляю пробіли
   //Якщо текст пустий виходим з функції
   if (text === "") {
-    return
+    return;
   }
 
   todos.push({
     id: Date.now(),
     text: text,
     completed: false,
-  })
+  });
 
-  saveTodos()
+  updateUi();
 
-  render()
-
-  input.value = "" // Очищую інпут
-  input.focus() // Додаємо фокус знову на список
-})
+  input.value = ""; // Очищую інпут
+  input.focus(); // Додаємо фокус знову на список
+});
 
 list.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete-btn")) {
-    const li = e.target.closest("li")
-    const id = Number(li.dataset.id)
+    const li = e.target.closest("li");
+    const id = Number(li.dataset.id);
 
-    todos = todos.filter((todo) => todo.id !== id)
+    todos = todos.filter((todo) => todo.id !== id);
 
-    saveTodos()
-    render()
+    updateUi();
   }
 
   if (e.target.classList.contains("todo-text")) {
-    const li = e.target.closest("li")
-    const id = Number(li.dataset.id)
-    const oldText = e.target.textContent
+    const li = e.target.closest("li");
+    const id = Number(li.dataset.id);
+    const oldText = e.target.textContent;
 
-    const input = document.createElement("input")
-    input.type = "text"
-    input.value = oldText
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = oldText;
 
-    e.target.replaceWith(input)
-    input.focus()
+    e.target.replaceWith(input);
+    input.focus();
 
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
-        const text = input.value.trim()
-        console.log(text)
+        const text = input.value.trim();
+        console.log(text);
         if (text === "") {
-          return
+          return;
         }
         todos = todos.map((todo) => {
           if (todo.id === id) {
             return {
               ...todo,
               text: text,
-            }
+            };
           }
-          return todo
-          
-        })
-        saveTodos()
-
-          render()
+          return todo;
+        });
+        updateUi();
       }
-    })
-
+    });
   }
 
   if (e.target.classList.contains("done-btn")) {
-    const li = e.target.closest("li")
-    const id = Number(li.dataset.id)
+    const li = e.target.closest("li");
+    const id = Number(li.dataset.id);
 
     todos = todos.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
           completed: !todo.completed,
-        }
+        };
       }
-      return todo
-    })
+      return todo;
+    });
 
-    saveTodos()
-
-    render()
+    updateUi();
   }
-})
+});
 
 // Додаю слухач подій на клаву.
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
-    button.click() // Викликаю метод .click на кнопці, що вже створи.
+    button.click(); // Викликаю метод .click на кнопці, що вже створи.
   }
-})
+});
 
 // Створити - виконання та видалення зі списку.
 
 // Створюємо функцію в якій ми будуємо повноціний елемент lі та повертаємо його, щоб ми могли його перевикористовувати і так далі.
 
 function createTodoElement(todo) {
-  const li = document.createElement("li") // Створюю елемент
-  li.classList.add("todo-item")
-  li.dataset.id = todo.id
+  const li = document.createElement("li"); // Створюю елемент
+  li.classList.add("todo-item");
+  li.dataset.id = todo.id;
 
-  const textSpan = document.createElement("span")
-  textSpan.classList.add("todo-text")
-  textSpan.textContent = todo.text
+  const textSpan = document.createElement("span");
+  textSpan.classList.add("todo-text");
+  textSpan.textContent = todo.text;
 
   if (todo.completed) {
-    textSpan.classList.add("completed")
+    textSpan.classList.add("completed");
   }
 
-  const actions = document.createElement("div")
-  actions.classList.add("actions")
+  const actions = document.createElement("div");
+  actions.classList.add("actions");
 
-  const deleteBtn = document.createElement("button")
-  deleteBtn.classList.add("delete-btn")
-  deleteBtn.textContent = "X"
+  const deleteBtn = document.createElement("button");
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.textContent = "X";
 
-  const doneBtn = document.createElement("button")
-  doneBtn.classList.add("done-btn")
-  doneBtn.textContent = "Done"
+  const doneBtn = document.createElement("button");
+  doneBtn.classList.add("done-btn");
+  doneBtn.textContent = "Done";
 
-  actions.appendChild(doneBtn)
-  actions.appendChild(deleteBtn)
+  actions.appendChild(doneBtn);
+  actions.appendChild(deleteBtn);
 
-  li.appendChild(textSpan)
-  li.appendChild(actions)
+  li.appendChild(textSpan);
+  li.appendChild(actions);
 
-  return li
+  return li;
+}
+
+function updateUi() {
+  saveTodos();
+  render();
 }
