@@ -58,32 +58,38 @@ list.addEventListener("click", (e) => {
     const id = Number(li.dataset.id);
     const oldText = e.target.textContent;
 
+    // 1. Створюємо тимчасовий input і підставляємо поточний текст
     const input = document.createElement("input");
     input.type = "text";
     input.value = oldText;
-
+    // 2. Замінюємо span на input
     e.target.replaceWith(input);
     input.focus();
-
+    // 3. Клавіша Enter просто знімає фокус (тригерить подію blur)
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
-        const text = input.value.trim();
-        console.log(text);
-        if (text === "") {
-          return;
-        }
+        input.blur();
+      }
+    });
+    // 4. Подія втрати фокусу (завершення редагування)
+    input.addEventListener("blur", () => {
+      const text = input.value.trim();
+      // Оновлюємо текст у масиві, якщо текст не пустий
+      if (text) {
         todos = todos.map((todo) => {
           if (todo.id === id) {
             return {
               ...todo,
-              text: text,
-            };
+              text, // скорочена форма запису text: text
+            }
           }
-          return todo;
-        });
-        updateUi();
+          return todo
+        })
       }
-    });
+      /* Незалежно від того, чи змінився текст, 
+      updateUi() викличе render(), який поверне гарний <span> замість <input> */
+      updateUi()
+    })
   }
 
   if (e.target.classList.contains("done-btn")) {
