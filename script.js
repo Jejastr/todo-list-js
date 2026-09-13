@@ -15,7 +15,10 @@ function loadTodos() {
 
 function render() {
   list.innerHTML = "";
-
+  if (todos.length === 0) {
+    list.innerHTML = '<li class="empty">Список порожній 📝</li>';
+    return;
+  }
   todos.forEach((todo) => {
     const li = createTodoElement(todo);
     list.appendChild(li);
