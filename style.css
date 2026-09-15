@@ -54,41 +54,47 @@ h1:hover {
 
 input.text {
   flex: 1;
-  height: 48px;
-  padding: 0 18px;
-  border-radius: 12px;
+  height: 52px;
+  padding: 0 20px;
+  border-radius: 14px;
   outline: none;
-  border: 2px solid #e8e2ee;
+  border: 2px solid #d5c3df;
   background-color: #ffffff;
-  font-size: 15px;
-  color: #333333;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #2d3748;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 14px rgba(156, 105, 163, 0.08);
 }
 
 input.text:hover {
-  border-color: #c9b4db;
+  border-color: #bfa8cb;
 }
 
 input.text:focus {
   border-color: #9c69a3;
-  box-shadow: 0 0 0 4px rgba(156, 105, 163, 0.15);
+  box-shadow: 0 0 0 4px rgba(156, 105, 163, 0.2);
   background-color: #ffffff;
 }
 
 input.text::placeholder {
-  color: #a0aec0;
-  font-weight: 400;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #9885a5;
+  font-weight: 600;
+  font-size: 15.5px;
+  letter-spacing: 0.25px;
 }
 
 .button {
-  height: 48px;
+  height: 52px;
   padding: 0 24px;
   background: linear-gradient(135deg, #a779b0 0%, #8b6694 100%);
   outline: none;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
@@ -123,7 +129,7 @@ li {
 .todo-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 14px 18px;
   background-color: #ffffff;
   border: 1px solid #f0eaf4;
@@ -139,45 +145,82 @@ li {
   border-color: #dcc8e6;
 }
 
+/* Контейнер вмісту завдання (текст + час створення) */
+.todo-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  margin-right: 14px;
+  gap: 3px;
+}
+
 /* Текст завдання */
 .todo-text {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
   font-size: 15px;
   font-weight: 500;
   color: #2d3748;
-  flex: 1;
-  margin-right: 14px;
   cursor: pointer;
   overflow-wrap: break-word;
   word-break: break-word;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+/* Іконка-підказка, що текст можна редагувати */
+.todo-text::after {
+  content: " ✎";
+  font-size: 13px;
+  color: #a779b0;
+  opacity: 0.55;
+  transition: all 0.2s ease;
+  display: inline-block;
+  margin-left: 4px;
 }
 
 .todo-text:hover {
-  color: #8b6694;
+  color: #7b4f85;
+}
+
+.todo-text:hover::after {
+  opacity: 1;
+  color: #7b4f85;
+  /* transform: scale(1.25) rotate(-10deg); */
+}
+
+/* Час створення завдання */
+.todo-date {
+  font-size: 11.5px;
+  color: #8a7794;
+  opacity: 0.8;
+  font-weight: 400;
+  letter-spacing: 0.2px;
 }
 
 /* Інпут при редагуванні завдання */
 .todo-item input {
-  flex: 1;
-  min-width: 0;
-  margin-right: 14px;
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 9px;
-  border: 2px solid #9c69a3;
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1.5px solid #9c69a3;
   outline: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 15px;
   font-weight: 500;
   color: #2d3748;
-  background-color: #fdfaff;
-  box-shadow: 0 0 0 3px rgba(156, 105, 163, 0.15);
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(156, 105, 163, 0.15);
+  box-sizing: border-box;
   transition: all 0.2s ease;
 }
 
 .todo-item input:focus {
   background-color: #ffffff;
   border-color: #85528c;
-  box-shadow: 0 0 0 4px rgba(156, 105, 163, 0.25);
+  box-shadow: 0 0 0 3px rgba(156, 105, 163, 0.22);
 }
 
 /* Виконана задача */
@@ -192,6 +235,8 @@ li {
   display: flex;
   gap: 8px;
   flex-shrink: 0;
+  height: 34px;
+  align-items: center;
 }
 
 .delete-btn,
@@ -310,7 +355,7 @@ li {
   /* Поле та кнопка стають одне під одним на весь екран */
   .addTask {
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
   }
 
   input.text {
@@ -318,12 +363,35 @@ li {
     height: 48px;
     font-size: 16px;
     /* Запобігає авто-зуму в Safari на iOS */
+    border: 2px solid #bfa8cb;
+    background-color: #ffffff;
+    box-shadow: 0 6px 18px rgba(156, 105, 163, 0.14);
+    border-radius: 14px;
+    padding: 0 18px;
+    flex: none;
+  }
+
+  input.text::placeholder {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: #9885a5;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.25px;
+    font-style: italic;
+  }
+
+  input.text:focus {
+    border-color: #8b5592;
+    box-shadow: 0 0 0 4px rgba(156, 105, 163, 0.28);
   }
 
   .button {
     width: 100%;
-    height: 44px;
-    font-size: 15px;
+    height: 52px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 14px;
   }
 
   /* Картки задач на вузьких екранах */
@@ -331,20 +399,29 @@ li {
     padding: 12px 14px;
   }
 
-  .todo-text {
-    font-size: 14px;
+  .todo-content {
     margin-right: 10px;
   }
 
-  .todo-item input {
-    height: 34px;
+  .todo-text {
+    min-height: 32px;
     font-size: 14px;
-    margin-right: 10px;
+  }
+
+  .todo-date {
+    font-size: 11px;
+  }
+
+  .todo-item input {
+    height: 32px;
+    font-size: 14px;
+    padding: 0 8px;
   }
 
   /* Компактні кнопки дій */
   .actions {
     gap: 6px;
+    height: 32px;
   }
 
   .delete-btn,

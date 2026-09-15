@@ -15,6 +15,7 @@ function loadTodos() {
 
 function render() {
   list.innerHTML = "";
+  
   if (todos.length === 0) {
     list.innerHTML = '<li class="empty">Список порожній 📝</li>';
     return;
@@ -38,6 +39,7 @@ button.addEventListener("click", () => {
     id: Date.now(),
     text: text,
     completed: false,
+    createdAt: Date.now(),
   });
 
   updateUi();
@@ -133,12 +135,26 @@ function createTodoElement(todo) {
   textSpan.classList.add("todo-text");
   textSpan.textContent = todo.text;
 
+  const dateSpan = document.createElement("span")
+  dateSpan.classList.add("todo-date")
+
+  if (todo.createdAt) {
+    const time = new Date(todo.createdAt).toLocaleDateString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+    dateSpan.textContent = `🕒 ${time}`;
+  }
+
   if (todo.completed) {
     textSpan.classList.add("completed");
   }
 
   const actions = document.createElement("div");
   actions.classList.add("actions");
+
+  const content = document.createElement("div")
+  content.classList.add("todo-content")
 
   const deleteBtn = document.createElement("button");
   deleteBtn.classList.add("delete-btn");
@@ -148,10 +164,13 @@ function createTodoElement(todo) {
   doneBtn.classList.add("done-btn");
   doneBtn.textContent = "Done";
 
+  content.appendChild(textSpan)
+  content.appendChild(dateSpan)
+
   actions.appendChild(doneBtn);
   actions.appendChild(deleteBtn);
 
-  li.appendChild(textSpan);
+  li.appendChild(content);
   li.appendChild(actions);
 
   return li;
