@@ -1,6 +1,9 @@
 const button = document.querySelector(".button"); // Отримую кнопку
 const input = document.querySelector(".text"); // Отримую інпут
 const list = document.querySelector(".list"); // Отримую список
+const progressText = document.querySelector(".progress-text");
+const progressPercent = document.querySelector(".progress-percent");
+const progressBar = document.querySelector(".progress-bar");
 
 let todos = loadTodos();
 
@@ -13,9 +16,19 @@ function loadTodos() {
   return data ? JSON.parse(data) : [];
 }
 
+function updateProgress() {
+  const total = todos.length
+  const completed = todos.filter(todo => todo.completed).length
+  const percent = total === 0 ? 0 : Math.round((completed / total) * 100)
+
+  progressText.textContent = `${completed} з ${total} виконано`
+  progressPercent.textContent = `${percent}%`
+  progressBar.style.width = `${percent}%`
+}
+
 function render() {
   list.innerHTML = "";
-  
+
   if (todos.length === 0) {
     list.innerHTML = '<li class="empty">Список порожній 📝</li>';
     return;
@@ -25,7 +38,7 @@ function render() {
     list.appendChild(li);
   });
 }
-
+updateProgress();
 render();
 // Додаю слухач подій на кнопку
 button.addEventListener("click", () => {
@@ -179,4 +192,5 @@ function createTodoElement(todo) {
 function updateUi() {
   saveTodos();
   render();
+  updateProgress();
 }
