@@ -1,11 +1,31 @@
 const button = document.querySelector(".button"); // Отримую кнопку
 const input = document.querySelector(".text"); // Отримую інпут
 const list = document.querySelector(".list"); // Отримую список
+// Отримую елементи прогрес-бару
 const progressText = document.querySelector(".progress-text");
 const progressPercent = document.querySelector(".progress-percent");
 const progressBar = document.querySelector(".progress-bar");
+// Отримує кнопки фільтрів
+const filterContainer = document.querySelector(".filters");
+const filterButtons = document.querySelectorAll(".filter-btn");
 
 let todos = loadTodos();
+
+let currentFilter = "all";
+
+filterContainer.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("filter-btn")) return;
+
+  filterButtons.forEach((btn) => {
+    btn.classList.remove("active")
+  })
+  e.target.classList.add("active")
+
+  currentFilter = e.target.dataset.filter
+
+  render()
+
+});
 
 function saveTodos() {
   localStorage.setItem("todos", JSON.stringify(todos));
@@ -29,17 +49,40 @@ function updateProgress() {
 function render() {
   list.innerHTML = "";
 
+  const filteredTodos = todos.filter((todo) => {
+    if (currentFilter === "active") {
+      return !todo.completed; // тільки невиконані
+    }
+    if (currentFilter === "important") {
+      return todo.important; // тільки із зірочкою
+    }
+    if (currentFilter === "completed") {
+      return todo.completed; // тільки виконані
+    }
+    return true; // якщо "all" — повертаємо все
+  });
+  // 2. Якщо взагалі немає задач
   if (todos.length === 0) {
     list.innerHTML = '<li class="empty">Список порожній 📝</li>';
     return;
   }
-  todos.forEach((todo) => {
+  // 3. Якщо задачі є, але в поточній вкладці нічого немає
+  if (filteredTodos.length === 0) {
+    list.innerHTML = '<li class="empty">Немає завдань у цій категорії ✨</li>';
+    return;
+  }
+
+  // 4. Якщо все ок - малюємо задачі
+
+  filteredTodos.forEach((todo) => {
     const li = createTodoElement(todo);
     list.appendChild(li);
   });
 }
+
 updateProgress();
 render();
+
 // Додаю слухач подій на кнопку
 button.addEventListener("click", () => {
   const text = input.value.trim(); // Отримаю значення інпуту та видаляю пробіли
@@ -53,6 +96,7 @@ button.addEventListener("click", () => {
     text: text,
     completed: false,
     createdAt: Date.now(),
+    important: false,
   });
 
   updateUi();
@@ -66,9 +110,12 @@ list.addEventListener("click", (e) => {
     const li = e.target.closest("li");
     const id = Number(li.dataset.id);
 
-    todos = todos.filter((todo) => todo.id !== id);
+    li.classList.add('removing')
 
-    updateUi();
+    setTimeout(() => {
+      todos = todos.filter((todo) => todo.id !== id);
+      updateUi();
+    }, 300)
   }
 
   if (e.target.classList.contains("todo-text")) {
@@ -126,6 +173,23 @@ list.addEventListener("click", (e) => {
 
     updateUi();
   }
+
+  if (e.target.classList.contains("star-btn")) {
+    const li = e.target.closest("li");
+    const id = Number(li.dataset.id);
+
+    todos = todos.map((todo) => {
+      if (todo.id === id) {
+        return {
+          ...todo,
+          important: !todo.important,
+        };
+      }
+      return todo;
+    });
+
+    updateUi();
+  }
 });
 
 // Додаю слухач подій на клаву.
@@ -159,9 +223,7 @@ function createTodoElement(todo) {
     dateSpan.textContent = `🕒 ${time}`;
   }
 
-  if (todo.completed) {
-    textSpan.classList.add("completed");
-  }
+
 
   const actions = document.createElement("div");
   actions.classList.add("actions");
@@ -177,9 +239,23 @@ function createTodoElement(todo) {
   doneBtn.classList.add("done-btn");
   doneBtn.textContent = "Done";
 
+  if (todo.completed) {
+    textSpan.classList.add("completed");
+  }
+
+  const starBtn = document.createElement("button");
+  starBtn.classList.add("star-btn");
+  starBtn.textContent = todo.important ? "★" : "☆";
+
+  if (todo.important) {
+    starBtn.classList.add("active");
+    li.classList.add("is-important");
+  }
+
   content.appendChild(textSpan)
   content.appendChild(dateSpan)
 
+  actions.appendChild(starBtn);
   actions.appendChild(doneBtn);
   actions.appendChild(deleteBtn);
 

@@ -160,6 +160,47 @@ input.text::placeholder {
   box-shadow: 0 1px 6px rgba(123, 104, 238, 0.3);
 }
 
+/* Панель фільтрів */
+.filters {
+  display: flex;
+  gap: 6px;
+  margin-top: 18px;
+  background-color: #f4ecf7;
+  padding: 5px;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.filter-btn {
+  flex: 1;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #7a6382;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  color: #432b4b;
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+.filter-btn.active {
+  background: #ffffff;
+  color: #5c3565;
+  box-shadow: 0 2px 8px rgba(156, 105, 163, 0.16);
+}
+
+.filter-btn:active {
+  transform: scale(0.96);
+}
+
 ul.list {
   list-style-type: none;
   padding: 0;
@@ -184,12 +225,67 @@ li {
   margin-bottom: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
   transition: all 0.25s ease;
+  animation: taskAppear 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .todo-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(156, 105, 163, 0.1);
   border-color: #dcc8e6;
+}
+
+/* Анімація появи задачі (плавна, пружна та м'яка) */
+@keyframes taskAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  65% {
+    transform: translateY(-2px) scale(1.008);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Анімація плавного видалення задачі */
+.todo-item.removing {
+  pointer-events: none;
+  animation: taskDelete 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes taskDelete {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    max-height: 120px;
+    margin-bottom: 12px;
+  }
+  40% {
+    opacity: 0;
+    transform: translateX(25px) scale(0.96);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(25px) scale(0.92);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-width: 0;
+    overflow: hidden;
+  }
+}
+
+/* Виділення важливої задачі: виразне м'яке сяйво навколо картки */
+.todo-item.is-important {
+  box-shadow: 0 6px 24px rgba(156, 105, 163, 0.35), 0 0 18px rgba(123, 104, 238, 0.28);
+}
+
+.todo-item.is-important:hover {
+  box-shadow: 0 10px 32px rgba(156, 105, 163, 0.44), 0 0 24px rgba(123, 104, 238, 0.36);
+  transform: translateY(-2px);
 }
 
 /* Контейнер вмісту завдання (текст + час створення) */
@@ -273,8 +369,10 @@ li {
 /* Виконана задача */
 .completed {
   text-decoration: line-through;
+  text-decoration-color: #a779b0;
   color: #a0aec0;
   opacity: 0.65;
+  transition: all 0.25s ease;
 }
 
 /* Контейнер кнопок дій */
@@ -284,6 +382,53 @@ li {
   flex-shrink: 0;
   height: 34px;
   align-items: center;
+}
+
+/* Кнопка зірочки (важливе) */
+.star-btn {
+  height: 34px;
+  width: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #faf6ed;
+  color: #c4a45a;
+}
+
+.star-btn:hover {
+  background-color: #fef3c7;
+  color: #d97706;
+  transform: scale(1.08);
+}
+
+.star-btn.active {
+  background-color: #fff4cc;
+  color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.28);
+  animation: starPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes starPop {
+  0% {
+    transform: scale(0.75);
+  }
+  50% {
+    transform: scale(1.3) rotate(15deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.star-btn:active {
+  transform: scale(0.92);
 }
 
 .delete-btn,
@@ -471,11 +616,28 @@ li {
     height: 32px;
   }
 
+  .star-btn {
+    height: 32px;
+    width: 32px;
+    font-size: 15px;
+  }
+
   .delete-btn,
   .done-btn {
     height: 32px;
     padding: 0 11px;
     font-size: 12px;
+  }
+
+  /* Адаптація панелі фільтрів */
+  .filters {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .filter-btn {
+    font-size: 12px;
+    padding: 7px 4px;
   }
 
   .empty {
