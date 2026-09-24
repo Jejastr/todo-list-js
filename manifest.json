@@ -1,0 +1,17 @@
+{
+  "name": "To Do App",
+  "short_name": "ToDo",
+  "description": "Зручний та красивий менеджер завдань",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8f5fa",
+  "theme_color": "#7b68ee",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

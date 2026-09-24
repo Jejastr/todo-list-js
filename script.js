@@ -283,3 +283,13 @@ function updateUi() {
   updateProgress();
   updateFilterCounts();
 }
+
+// Реєстрація Service Worker для PWA
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then(() => console.log("PWA Service Worker готовий!"))
+      .catch((err) => console.log("Помилка Service Worker:", err));
+  });
+}
