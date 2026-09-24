@@ -46,6 +46,17 @@ function updateProgress() {
   progressBar.style.width = `${percent}%`
 }
 
+function updateFilterCounts() {
+  const all = todos.length;
+  const active = todos.filter((todo) => !todo.completed).length;
+  const important = todos.filter((todo) => todo.important).length;
+  const completed = todos.filter((todo) => todo.completed).length;
+  document.querySelector("#countAll").textContent = all;
+  document.querySelector("#countActive").textContent = active;
+  document.querySelector("#countImportant").textContent = important;
+  document.querySelector("#countCompleted").textContent = completed;
+}
+
 function render() {
   list.innerHTML = "";
 
@@ -82,6 +93,7 @@ function render() {
 
 updateProgress();
 render();
+updateFilterCounts();
 
 // Додаю слухач подій на кнопку
 button.addEventListener("click", () => {
@@ -269,4 +281,5 @@ function updateUi() {
   saveTodos();
   render();
   updateProgress();
+  updateFilterCounts();
 }
